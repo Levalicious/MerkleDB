@@ -39,7 +39,8 @@ Slice from_string(char* str) {
 }
 
 FILE* getTriFile(MerkleDB* db, uint16_t file) {
-    char *path = calloc(1, 512);
+    char *path = malloc(256);
+    path[0] = '\0';
     sprintf(path, "%s/trie/%d.tri", db->name, file);
     FILE* out = fopen(path, "rb+");
     free(path);
@@ -51,7 +52,8 @@ FILE* currentTriFile(MerkleDB* db) {
 }
 
 FILE* getValFile(MerkleDB* db, uint16_t file) {
-    char *path = calloc(1, 512);
+    char *path = malloc(256);
+    path[0] = '\0';
     sprintf(path, "%s/data/%d.dat", db->name, file);
     FILE* out = fopen(path, "rb+");
     free(path);
@@ -538,6 +540,7 @@ MerkleDB* openDB(char* name) {
         MerkleDB* db = malloc(sizeof(MerkleDB));
         zeroDB(db);
         initDB(db, name);
+        db->namelen = strlen(name);
         closedir(dir);
         return db;
     }
